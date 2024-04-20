@@ -1,21 +1,178 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="../core/vue2.js"></script>
+    <style>
+        * {
+            margin: 10px;
+        }
+
+        .demo {
+            height: 50px;
+            background-color: burlywood;
+        }
+
+        .box1 {
+            padding: 5px;
+            background-color: skyblue;
+        }
+
+        .box2 {
+            padding: 5px;
+            background-color: orange;
+        }
+        .demo1{
+            background-color: bisque;
+        }
+        .list{
+            height: 200px;
+            background-color: peru;
+            width: 200px;
+            overflow: auto;
+        }
+        .list li{
+            height: 100px;
+        }
+    </style>
 </head>
+
 <body>
     <div id="root">
-
+        年龄：{{age}}
+        名字：{{name}}
+        <br>
+        <!-- v-model只能绑定到表单类元素，有value值的元素 -->
+        双项数据绑定<input type="text" name="" v-model:value="age">
+        <br>
+        单项数据绑定<input type="text" name="" v-bind:value="name">
+        <br>
+        <button @click="showInfo(66,$event)">点我</button>
+        <br>
+        <a @click.prevent="popUps" href="https://www.baidu.com">阻止默认事件</a>
+        <br>
+        <div class="demo" @click="popUps">
+            <button @click.stop="popUps">阻止事件冒泡</button>
+            <a href="https://www.baidu.com" @click.stop.prevent="popUps">阻止事件冒泡和默认事件</a>
+        </div>
+        <button @click.once="popUps">事件只触发一次</button>
+        <br>
+        <!-- 事件捕获模式 -->
+        <div class="box1" @click.capture="showMsg(1)">
+            div1
+            <div class="box2" @click="showMsg(2)">
+                div2
+            </div>
+        </div>
+        <!-- 只有event.target是当前操作的元素时才触发的事件 -->
+        <div class="demo1" @click.self="demo1">
+            <button @click="demo1">点我提示信息</button>
+        </div>
+        <!-- 事件默认行为立即执行,无需等待回调完毕
+        @scroll 滚动条的滚动监听
+        @wheel 鼠标滚动轮的监听
+        -->
+        <ul class="list" @wheel.passive="ulScroll">
+            <li>1</li>
+            <li>2</li>
+            <li>3</li>
+            <li>4</li>
+        </ul>
+        <!-- 键盘监听 -->
+        <input type="text" placeholder="按下回车提示输入" @keyup.huiche="showInfoKey">
     </div>
 </body>
 <script type="text/javascript">
     Vue.config.productionTip = false; // 阻止vue在启动时生成生产提示
+    Vue.config.keyCodes.huiche = 13; // 定义别名按键
+    let person = {
+        name: "张三 ",
+        age: 12,
+        address: '北京'
+    }
+    const vm = new Vue({
+        // el: "#root",
+        // data: {
+        //     age:18
+        // }
 
-    const app = new Vue({
-    
+        // 函数式数据绑定,vue会做数据劫持和数据代理
+        data() {
+            return {
+                age: 13,
+                name: 'zhangsan'
+            }
+        },
+        methods: {
+            showInfo(value, event) {
+                // alert("这是测试方法")
+                console.log(event.target.innerText, value)
+                // console.log(this) 此处的this是vm
+            },
+            popUps(e) {
+                // e.preventDefault();
+                alert('你好！')
+            },
+            showMsg(msg) {
+                console.log(msg)
+            },
+            demo1(event){
+                // console.log(event.target)
+                alert("你好啊")
+            },
+            ulScroll(){
+                console.log("@")
+                for(let i = 1; i <= 10000; i++){
+                    console.log("累坏了");
+                }
+            },
+            showInfoKey(e){
+                // console.log(e.keyCode)
+                // if(e.keyCode !== 13) return;
+                console.log(e.target.value)
+                console.log(e.key,e.keyCode)
+            }
+        }
     });
+
+
+    let number = 18;
+    // 通过此方式对对象的属性进行限制
+    Object.defineProperty(person, 'id', {
+        // value:18112212,
+        // // 属性是否可列枚举（遍历）
+        // enumerable:true,
+        // // 属性是否可以被更改
+        // writable:true,
+        // // 控制属性是否可以被删除
+        // configurable:true,
+        // get(){
+        //     return number;
+        // }
+        // 通过get方法可以动态给对象赋值，当外部属性发生变化时，对象的属性随之发生变化
+        get() {
+            console.log("对属性赋值");
+            return number;
+        },
+        // 当有人修改person的age属性时，set函数setter就会被调用，且会收到修改的具体值
+        set(value) {
+            console.log("有人修改了age属性，且值是：" + value)
+            number = value;
+            return number;
+        }
+    })
+    console.log(Object.keys(person))
+    console.log(person)
+
+    // 绑定容器的方式
+    // setTimeout(()=>{
+    //     app.$mount('#root');
+    // },1000)
+    vm.$mount('#root');
+    console.log(vm)
 </script>
+
 </html>
