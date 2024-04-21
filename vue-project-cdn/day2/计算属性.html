@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../core/vue2.js"></script>
+</head>
+
+<body>
+    <div id="root">
+        <!-- 计算属性差值语法实现 -->
+        <input type="text" v-model:value="firstName"><br><br>
+        <input type="text" :value="lastName"><br><br>
+        全名：{{firstName.slice(0,3)}}{{lastName}}<br><br>
+        <!-- <button @click="fullName">点我</button><br><br> -->
+        <!-- 方法实现 -->
+        <span>{{fullName()}}</span><br><br>
+        <!-- 计算属性实现 -->
+        <span>{{computedFullName}}</span>
+    </div>
+</body>
+<script type="text/javascript">
+    Vue.config.productionTip = false;
+    const vm = new Vue({
+        el: "#root",
+        data: {
+            firstName: "张",
+            lastName: "三"
+        },
+        methods: {
+            fullName() {
+                // alert("你好")
+                return this.firstName.slice(0, 3) + "-" + this.lastName
+            },
+        },
+        computed: {
+            // computedFullName: {
+            //     // 当有人读取fullname时，get就会被调用且返回值就作为fullName的值
+            //     // 完整写法
+            //     get() {
+            //         console.log("get被调用了")
+            //         return this.firstName + "-" + this.lastName;
+            //     },
+            //     set(value) {
+            //         console.log("set被调用了",value)
+            //         const arr = value.split("-");
+            //         this.firstName = arr[0];
+            //         this.lastName = arr[1];
+            //         return this.firstName + "-" + this.lastName;
+            //     }
+            // }
+            // 简写
+            computedFullName() {
+              return this.firstName + "-" + this.lastName;
+            }
+        }
+    })
+    console.log(vm)
+</script>
+
+</html>
