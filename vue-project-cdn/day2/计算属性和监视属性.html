@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../core/vue2.js"></script>
+</head>
+
+<body>
+    <div id="root">
+        <input type="text" v-model:value="firstName"><br><br>
+        <input type="text" v-model:value="lastName"><br><br>
+        全名：{{fullName}}<br><br>
+        <!-- <button @click="fullName">点我</button><br><br> -->
+        <!-- 方法实现 -->
+        <!-- <span>{{a}}</span> -->
+    </div>
+</body>
+<script type="text/javascript">
+    Vue.config.productionTip = false;
+    const vm = new Vue({
+        el: "#root",
+        data: {
+            firstName: "张",
+            lastName: "三",
+            fullName: "张-三"
+        },
+        // computed: {
+        //     fullName(){
+        //         return this.firstName + this.lastName;
+        //     }
+        // },
+        // 异步计算就使用watch
+        watch: {
+            firstName(value) {
+                // 定时器不使用箭头函数this指向Window对象，箭头函数this指向外部
+                setTimeout(() => {
+                    this.fullName = value + this.lastName;
+                }, 1000);
+            },
+            lastName(value) {
+                this.fullName = this.firstName + value
+            }
+        }
+    })
+    console.log(vm)
+</script>
+
+</html>

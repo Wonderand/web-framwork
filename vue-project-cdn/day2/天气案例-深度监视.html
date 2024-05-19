@@ -45,12 +45,16 @@
         },
         watch: {
             // 当ishot发生改变时
-            isHot: {
-                immediate: true,
-                handler(newValue, oldValue) {
-                    console.log("isHot被修改了", newValue, oldValue)
-                }
+            // ishot的简写形式
+            isHot(newValue,oldValue){
+                console.log('ishot被修改了',newValue,oldValue)
             },
+            // isHot: {
+            //     immediate: true,
+            //     handler(newValue, oldValue) {
+            //         console.log("isHot被修改了", newValue, oldValue)
+            //     }
+            // },
             // 监听多级结构中某个属性的变化
             'numbers.a': {
                 handler() {
