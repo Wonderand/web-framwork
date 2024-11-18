@@ -36,12 +36,14 @@
                 {{number}}-{{index}}
             </li>
         </ul>
+        <hr>
+        vm.set添加的内容{{student.age}} {{student.name}}
     </div>
 </body>
 <script>
     Vue.config.productionTip = false
 
-    new Vue({
+    let vm = new Vue({
         el: '#root',
         data: {
             persions: [
@@ -66,7 +68,11 @@
                 price: '70万',
                 color: '黑色'
             },
-            str: 'hello'
+            str: 'hello',
+            student: {
+                age:18,
+                //vm.$set(vm._data.student,"name","男") 
+            }
         }
     })
 </script>
