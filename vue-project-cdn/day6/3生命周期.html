@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Document</title>
+    <script src="../core/vue2.js"></script>
+</head>
+<body>
+    <!--
+        生命周期：
+            1.又名：生命周期回调函数、生命周期函数、生命周期钩子。
+            2.是什么：Vue在关键时刻帮我们调用的一些特殊名称的函数。
+            3.生命周期函数的名字不可更改，但函数的具体内容是程序员根据需求编写的。
+            4.生命周期函数中的this是指向vm或组件实例对象。
+            总结：创建：beforeCreate()，created()、挂载：beforeMount()，（重要）mounted()、
+                 更新：beforeUpdate()，updated()、销毁：（重要）beforeDestroy()，destroyed()
+     -->
+    <div id="root">
+        <h2 :style="{opacity}">欢迎学习VUE</h2>
+        <button @click="stop">点我停止变换</button>
+        <hr>
+        <h2>{{n}}</h2>
+        <button @click="add">点我n+1</button>
+        <button @click="bye">点我销毁vm</button>
+    </div>
+</body>
+<script type="text/javascript">
+    Vue.config.productionTip = false
+    new Vue({
+        el: '#root',
+        data:{
+            opacity:1,
+            n:1,
+        },
+        // template:`<h2 :style="{opacity}">欢迎学习VUE</h2>`,
+        methods:{
+            change(){
+                this.id = setInterval(() => {
+                    console.log('setInterval')
+                    this.opacity -= 0.01
+                    if (this.opacity <= 0){
+                        this.opacity = 1
+                    }
+                },16)
+            },
+            add(){
+                console.log('add')
+                this.n ++
+            },
+            bye(){
+                console.log('bay~~')
+                //完全销毁一个实例。清理它与其它实例的连接，解绑它的全部指令及事件监听器。
+                this.$destroy()
+            },
+            stop(){
+                this.$destroy()
+            }
+        },
+        watch:{
+            n(val, old){
+                console.log(val, old)
+            }
+        },
+        // 创建前
+        // 此时无法通过vm访问到data总的数据、methods中的方法
+        beforeCreate(){
+            console.log('beforeCreate')
+        },
+        // 创建完毕
+        // 此时可以通过VM访问到data中的数据、methods中配置的方法。
+        created(){
+            console.log('created')
+        },
+
+        // 挂载前
+        // 此时页面呈现的是未经Vue编译的DOM结构。
+        // 所有的DOM操作最终都不奏效。
+        beforeMount(){
+            console.log('beforeMount')
+        },
+        // 挂载完毕
+        // 此时页面中呈现的都是经过vue编译的DOM。对DOM的操作均有效（尽可能避免），
+        // 至此初始化过程结束，一般在此进行：开启定时器、发送网络请求、订阅消息、绑定自定义事件等初始化操作
+        mounted(){
+            console.log('mounted')
+            console.log(this)
+            this.change()
+        },
+
+        // 更新前
+        // 此时数据是新的，但是页面是旧的，即：页面尚未和数据保持同步
+        beforeUpdate(){
+            console.log('beforeUpdate')
+        },
+        // 更新完毕
+        // 此时数据是新的，页面也是新的，即，页面和数据保持同步
+        updated(){
+            console.log('updated')
+            // this.n = 11
+        },
+
+        // 销毁前
+        // 此时vm中所有的data、methods、指令等等，都处于可用状态，
+        // 马上要执行销毁过程，一般在此阶段；关闭定时器、取消消息订阅、解除自定义事件等收尾操作
+        beforeDestroy(){
+            console.log('beforeDestroy')
+            // console.log(this)
+            this.add()
+            clearInterval(this.id)
+            debugger
+        },
+        // 销毁完毕
+        destroyed(){
+            console.log('destroyed')
+        }
+    })
+</script>
+</html>
