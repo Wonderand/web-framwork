@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../core/vue2.js"></script>
+</head>
+
+<body>
+    <div id="root">
+        <app></app>
+    </div>
+</body>
+<script type="text/javascript">
+    Vue.config.productionTip = false;
+    //定义student组件
+    const stu = Vue.extend({
+        template: `<div><h2>学生姓名:{{name}}</h2>
+        <h2>学生年龄:{{age}}</h2><button @click=showAge>点我显示年龄</button></div>`,
+        data() {
+            return {
+                name: '张三',
+                age: 18,
+            }
+        },
+        methods: {
+            showAge() {
+                alert(this.age)
+            }
+        }
+    })
+    console.log(stu)
+    //定义school组件
+    const sc = Vue.extend({
+        template: `<div><h2>学校名称:{{schoolName}}</h2>
+        <h2>学校地址:{{address}}</h2><button @click=showName>点我显示学校名</button><student></student></div>
+        `,
+        components: {
+            Student: stu
+        },
+        data() {
+            return {
+                schoolName: '尚硅谷',
+                address: '北京',
+            }
+        },
+        methods: {
+            showName() {
+                alert(this.schoolName)
+            }
+        }
+    })
+
+    //定义hello组件
+    const hello = Vue.extend({
+        template: `<div><h2>{{msg}}</h2></div>`,
+        data() {
+            return {
+                msg: "你好啊！"
+            }
+        }
+    })
+
+    //定义app组件
+    const app = Vue.extend({
+        template: `<div><school></school><hello></hello></div>`,
+        components: {
+            School: sc,
+            Hello: hello
+        }
+    })
+
+    const vm = new Vue({
+        el: '#root',
+        data: {
+            msg: "你好啊！"
+        },
+        components: {
+            app: app
+        }
+    })
+
+</script>
+
+</html>
